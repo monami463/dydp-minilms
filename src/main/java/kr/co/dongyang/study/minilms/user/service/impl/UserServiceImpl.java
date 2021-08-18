@@ -29,30 +29,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServiceResult addUser(UserRegister parameter) {
 
-        ServiceResult result = new ServiceResult();
 
-        if (parameter.getUserId() ==null || parameter.getUserId().length()<1){
-            result.setResult(false);
-            result.setMessage("아이디 정보가 정확하지 않습니다.");
+        if (parameter.getUserId() == null || parameter.getUserId().length() < 1) {
+
+            return ServiceResult.fail("아이디 정보가 정확하지 않습니다.");
+
         }
 
 
         //사용자 아이디가 존재하는지 체크
         Optional<User> optionalUser = userRepository.findById(parameter.getUserId());
-        if(optionalUser.isPresent()){
-            result.setResult(false);
-            result.setMessage("아이디가 이미 존재합니다.");
-            return result;
+        if (optionalUser.isPresent()) {
 
+            return ServiceResult.fail("아이디가 이미 존재합니다.");
 
         }
 
 
         //비밀번호를 암호화 저장해야함.
         String encPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt());
-
-
-
 
 
         User user = User.builder()
@@ -69,15 +64,15 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
+        return ServiceResult.success();
 
-        result.setResult(true);
-        return result;
     }
+
     @Override
-    public UserDto getUser(String userId){
+    public UserDto getUser(String userId) {
 
         Optional<User> optionalUser = userRepository.findById(userId);
-        if (!optionalUser.isPresent()){
+        if (!optionalUser.isPresent()) {
             return null;
         }
 
@@ -87,10 +82,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ServiceResult getUsers() {
+
+        List<User> users = userRepository.findAll();
+
+        List<UserDto> userDtoList = UserDto.of(users);
+
+
+        return ServiceResult.success();
+
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<User> optionalUser = userRepository.findById(username);
-        if(!optionalUser.isPresent()){
+        if (!optionalUser.isPresent()) {
             throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
         }
         User user = optionalUser.get();
@@ -99,15 +106,14 @@ public class UserServiceImpl implements UserService {
 
         grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        if(user.isAdminYn()){
+        if (user.isAdminYn()) {
             grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 
 
-
         return new org.springframework.security.core.userdetails.User(user.getUserId()
-                            ,user.getPassword()
-                            ,grantedAuthorityList);
+                , user.getPassword()
+                , grantedAuthorityList);
 
 
     }

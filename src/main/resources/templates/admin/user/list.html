@@ -1,8 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>관리자페이지</title>
+    <style>
+        table.list{
+            width:100%;
+            border-collapse: collapse;
+        }
+        table.list th, table.list td{
+            border : solid 1px #000000;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -10,7 +20,44 @@
       회원목록
   </h1>
 
-  <hr/>
+
+  <div th:text="${userList}">
+  </div>
+
+  <table class="list">
+      <thead>
+      <tr>
+          <th>아이디</th>
+          <th>이름</th>
+          <th>연락처</th>
+          <th>주소</th>
+          <th>등록일</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr th:each="x : ${userList}">
+          <td>
+              <p th:text="${x.userId}"></p>
+          </td>
+          <td>
+              <p th:text="${x.name}"></p>
+          </td>
+            <td>
+                <p th:text="${x.phone}"></p>
+            </td>
+            <td>
+                <p>
+                (<span th:text="${x.zipcode}"></span>)
+                <span th:text="${x.addr}"></span>
+                <span th:text="${x.addrDetail}"></span>
+                </p>
+            </td>
+            <td>
+                <p th:text="${x.regDtText}"></p>
+            </td>
+      </tr>
+      </tbody>
+  </table>
 
 
 </body>
