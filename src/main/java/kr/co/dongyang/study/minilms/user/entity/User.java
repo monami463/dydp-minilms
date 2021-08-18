@@ -28,6 +28,8 @@ public class User {
     private String gender;
     private LocalDateTime regDt;
 
+    private boolean adminYn; //관리자인지여부
+
 
 
     }

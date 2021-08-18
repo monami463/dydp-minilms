@@ -1,0 +1,13 @@
+{
+  "header": {
+    "result": false,
+    "message": "아이디가 이미 존재합니다.",
+    "resultCode": "001"
+  },
+  "body": {
+    "userId": "ppaa5637@naver.com",
+    "userName": "박현규"
+  }
+
+
+}

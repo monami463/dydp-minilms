@@ -1,14 +1,22 @@
 package kr.co.dongyang.study.minilms.user.service.impl;
 
+import kr.co.dongyang.study.minilms.user.dto.UserDto;
 import kr.co.dongyang.study.minilms.user.entity.User;
 import kr.co.dongyang.study.minilms.user.model.ServiceResult;
 import kr.co.dongyang.study.minilms.user.model.UserRegister;
 import kr.co.dongyang.study.minilms.user.repository.UserRepository;
 import kr.co.dongyang.study.minilms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -41,7 +49,10 @@ public class UserServiceImpl implements UserService {
 
 
         //비밀번호를 암호화 저장해야함.
-        String encPassword = parameter.getPassword();
+        String encPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt());
+
+
+
 
 
         User user = User.builder()
@@ -51,6 +62,7 @@ public class UserServiceImpl implements UserService {
                 .zipcode(parameter.getZipcode())
                 .addr(parameter.getAddr())
                 .addrDetail(parameter.getAddrDetail())
+                .phone(parameter.getPhone())
                 .gender(parameter.getGender())
                 .regDt(LocalDateTime.now())
                 .build();
@@ -60,5 +72,43 @@ public class UserServiceImpl implements UserService {
 
         result.setResult(true);
         return result;
+    }
+    @Override
+    public UserDto getUser(String userId){
+
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()){
+            return null;
+        }
+
+        User user = optionalUser.get();
+        return UserDto.of(user);
+
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Optional<User> optionalUser = userRepository.findById(username);
+        if(!optionalUser.isPresent()){
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
+        }
+        User user = optionalUser.get();
+
+        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
+
+        grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        if(user.isAdminYn()){
+            grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
+
+
+        return new org.springframework.security.core.userdetails.User(user.getUserId()
+                            ,user.getPassword()
+                            ,grantedAuthorityList);
+
+
     }
 }

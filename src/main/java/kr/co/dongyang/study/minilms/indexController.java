@@ -14,4 +14,11 @@ public class indexController {
 
         return "index";
     }
+
+    @GetMapping("/common/denied")
+    public String commonDenied(){
+
+        return "common/denied";
+    }
+
 }

@@ -10,14 +10,14 @@ import lombok.ToString;
 public class UserRegister {
 
 
-    String userId;
-    String password;
-    String userName;
-    String zipcode;
-    String addr;
-    String addrDetail;
-    String phone;
-    String gender;
+    private String userId;
+    private String password;
+    private String userName;
+    private String zipcode;
+    private String addr;
+    private String addrDetail;
+    private String phone;
+    private String gender;
 
 
 }

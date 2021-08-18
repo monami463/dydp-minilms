@@ -1,16 +1,13 @@
 package kr.co.dongyang.study.minilms.user.controller;
 
 
-import kr.co.dongyang.study.minilms.user.model.ServiceResult;
-import kr.co.dongyang.study.minilms.user.model.UserRegister;
 import kr.co.dongyang.study.minilms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @RequiredArgsConstructor
 @Controller
@@ -26,31 +23,24 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/register")
-    public String registerSubmit(HttpServletRequest request,Model model, UserRegister parameter) {
-
-        System.out.println(parameter.toString());
-
-
-        ServiceResult result = userService.addUser(parameter);
-
-
-        if (!result.isResult()) {
-            model.addAttribute("errorMessage", result.getMessage());
-            return "user/register";
-
-        }
-        return "redirect:/user/register-complete";
-    }
-
     @GetMapping("/user/register-complete")
-    public String registercomplete() {
+    public String registerComplete() {
         return "user/register_complete";
 
 
-
-
     }
 
+    @GetMapping("/user/mypage")
+    public String mypage(){
+
+        return "user/mypage";
+    }
+
+    @RequestMapping("/user/login")
+    public String login(){
+
+        return  "user/login";
+
+    }
 
 }
