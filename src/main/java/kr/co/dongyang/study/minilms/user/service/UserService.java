@@ -4,6 +4,7 @@ import kr.co.dongyang.study.minilms.user.dto.UserDto;
 import kr.co.dongyang.study.minilms.user.entity.User;
 import kr.co.dongyang.study.minilms.user.model.ServiceResult;
 import kr.co.dongyang.study.minilms.user.model.UserRegister;
+import kr.co.dongyang.study.minilms.user.model.UserSearch;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
@@ -13,5 +14,5 @@ public interface UserService extends UserDetailsService {
 
     UserDto getUser(String userId);
 
-    ServiceResult getUsers();
+    ServiceResult getUsers(UserSearch parameter);
 }

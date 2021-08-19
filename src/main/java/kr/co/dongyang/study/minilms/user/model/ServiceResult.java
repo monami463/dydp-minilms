@@ -14,6 +14,7 @@ public class ServiceResult<T> {
     private boolean result;
     private String message;
 
+    private int totalCount;
     private List<T> list;
     private T detail;
 
@@ -32,7 +33,7 @@ public class ServiceResult<T> {
 
     }
 
-    public static <S> ServiceResult success() {
+    public static ServiceResult success() {
 
         ServiceResult<Object> result = new ServiceResult<>();
         result.setResult(true);
@@ -50,6 +51,16 @@ public class ServiceResult<T> {
 
     }
 
+    public static <S> ServiceResult success(int totalCount,List<S> list) {
+
+        ServiceResult<S> result = new ServiceResult<>();
+        result.setResult(true);
+        result.setTotalCount(totalCount);
+        result.setList(list);
+        return result;
+
+    }
+
     public static <S> ServiceResult success(List<S> list) {
 
         ServiceResult<S> result = new ServiceResult<>();
@@ -58,4 +69,5 @@ public class ServiceResult<T> {
         return result;
 
     }
+
 }

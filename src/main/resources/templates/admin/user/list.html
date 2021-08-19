@@ -4,61 +4,161 @@
     <meta charset="UTF-8">
     <title>관리자페이지</title>
     <style>
-        table.list{
-            width:100%;
+        table.list {
+            width: 100%;
             border-collapse: collapse;
         }
-        table.list th, table.list td{
-            border : solid 1px #000000;
+
+        table.list th, table.list td {
+            border: solid 1px #000000;
         }
 
+        a.on {
+            font-weight: bold;
+            color: blue;
+        }
+
+        div.pager {
+            text-align: center;
+        }
+        .search-toolbar{
+            text-align: right;
+            position: relative;
+            height: 30px;
+        }
+        .search-toolbar .total-count{
+            position: absolute;
+            left: 0; top: 0;
+            line-height: 30px;
+            height: 30px;
+            margin: 0; padding: 0;
+        }
+
+        .search-toolbar .button-all{
+            display: none;
+        }
+        table.list .nothing{
+            text-align: center;
+            line-height: 100px;
+            min-height: 100px;
+        }
+
+
+
     </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        var getQueryMap = function(){
+            var searchList = (location.search.length > 0 ? location.search.substring(1) : '').split('&') ;
+            var searchMap = {};
+            for(var i = 0; i < searchList.length; i++) {
+                var item =searchList[i].split('=');
+                searchMap[ item[0] ] = item[1];
+            }
+            return searchMap;
+        };
+
+        var getQueryValue = function(queryKey){
+
+            var queryMap = getQueryMap();
+            return queryMap[queryKey] || '';
+        };
+
+
+        $(document).ready(function (){
+
+            let searchType = getQueryValue('searchType');
+            let searchValue = getQueryValue('searchValue');
+
+            $('#searchType').val(searchType);
+            $('#searchValue').val(searchValue);
+
+            if(searchType.length > 0 || searchValue >0){
+                $('#listAllButton').show();
+            }
+
+        });
+
+    </script>
 </head>
 <body>
 
-  <h1>
-      회원목록
-  </h1>
+<h1>
+    회원목록
+</h1>
+
+<div class="search-toolbar">
+
+    <p class="total-count">전체개수: <span th:text="${totalCount}">0</span> </p>
 
 
-  <div th:text="${userList}">
-  </div>
 
-  <table class="list">
-      <thead>
-      <tr>
-          <th>아이디</th>
-          <th>이름</th>
-          <th>연락처</th>
-          <th>주소</th>
-          <th>등록일</th>
-      </tr>
-      </thead>
-      <tbody>
-        <tr th:each="x : ${userList}">
-          <td>
-              <p th:text="${x.userId}"></p>
-          </td>
-          <td>
-              <p th:text="${x.name}"></p>
-          </td>
-            <td>
-                <p th:text="${x.phone}"></p>
-            </td>
-            <td>
-                <p>
+
+
+    <form method="get">
+        <button id="listAllButton" class="button-all" onclick="location.href='/admin/user/list'" type="button"> 전체목록 </button>
+
+        <select id="searchType" name="searchType">
+            <option value=""> 전체</option>
+            <option value="name"> 이름</option>
+            <option value="email"> 이메일</option>
+        </select>
+        <input id="searchValue" type="search" name="searchValue" required/>
+        <button type="submit">검색</button>
+    </form>
+</div>
+
+
+<table class="list">
+    <thead>
+    <tr>
+        <th>아이디</th>
+        <th>이름</th>
+        <th>연락처</th>
+        <th>주소</th>
+        <th>등록일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="x : ${userList}">
+        <td>
+            <p th:text="${x.userId}"></p>
+        </td>
+        <td>
+            <p th:text="${x.name}"></p>
+        </td>
+        <td>
+            <p th:text="${x.phone}"></p>
+        </td>
+        <td>
+            <p>
                 (<span th:text="${x.zipcode}"></span>)
                 <span th:text="${x.addr}"></span>
                 <span th:text="${x.addrDetail}"></span>
-                </p>
-            </td>
-            <td>
-                <p th:text="${x.regDtText}"></p>
-            </td>
-      </tr>
-      </tbody>
-  </table>
+            </p>
+        </td>
+        <td>
+            <p th:text="${x.regDtText}"></p>
+        </td>
+    </tr>
+    <tr th:if="${userList.size() <1}">
+        <td colspan="5">
+            <p class="nothing">내용이 존재하지 않습니다.</p>
+        </td>
+    </tr>
 
+
+
+    </tbody>
+</table>
+
+<div th:if="${userList.size() > 0 }" class="pager">
+
+    <div th:utext="${pager}"></div>
+
+</div>
 
 </body>
 </html>

@@ -1,9 +1,11 @@
 package kr.co.dongyang.study.minilms.user.service.impl;
 
+import kr.co.dongyang.study.minilms.admin.mapper.UserMapper;
 import kr.co.dongyang.study.minilms.user.dto.UserDto;
 import kr.co.dongyang.study.minilms.user.entity.User;
 import kr.co.dongyang.study.minilms.user.model.ServiceResult;
 import kr.co.dongyang.study.minilms.user.model.UserRegister;
+import kr.co.dongyang.study.minilms.user.model.UserSearch;
 import kr.co.dongyang.study.minilms.user.repository.UserRepository;
 import kr.co.dongyang.study.minilms.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public ServiceResult addUser(UserRegister parameter) {
@@ -82,14 +85,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServiceResult getUsers() {
-
-        List<User> users = userRepository.findAll();
-
-        List<UserDto> userDtoList = UserDto.of(users);
+    public ServiceResult getUsers(UserSearch parameter) {
 
 
-        return ServiceResult.success();
+
+        int totalCount = userMapper.selectListCount(parameter);
+        List<UserDto> userList = userMapper.selectList(parameter);
+
+        //List<User> users = userRepository.findAll();
+        //List<UserDto> userDtoList = UserDto.of(users);
+
+        return ServiceResult.success(totalCount, userList);
 
     }
 

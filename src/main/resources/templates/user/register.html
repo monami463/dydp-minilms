@@ -128,14 +128,17 @@
                     <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="M">
                     <label class="form-check-label" for="inlineRadio2">남성</label>
                 </div>
+            </div>
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
                     <button type="submit" class="btn btn-lg btn-primary">회원 가입 완료</button>
                     <button type="reset" class="btn btn-lg btn-secondary">초기화</button>
                 </div>
-            </div>
+
 
         </form>
+
+
     </div>
 
 </main>
@@ -250,7 +253,7 @@
 
 <script src="/res/lib/axios.js"></script>
 <script>
-    /*
+    /**
      *회원가입 함수
      */
 
@@ -269,7 +272,7 @@
                 return false;
             }
 
-            location.href = '/user/register-complete';
+            location.href = "/user/register-complete";
 
 
         }).catch(function (err) {
@@ -282,7 +285,7 @@
     /**
      * 아이디(이메일) 중복여부 확인
      */
-    var checkUserId = function (parameter){
+    var checkUserId = function (parameter) {
 
         var url = '/api/user/check-userid.api';
 
@@ -297,7 +300,6 @@
             }
 
             alert("사용가능한 아이디입니다.")
-
 
 
         }).catch(function (err) {
@@ -316,15 +318,14 @@
 
             var userId = $('#submitForm').find('input[name=userId]').val();
 
-            if(userId ==""){
+            if (userId == "") {
                 alert("중복확인할 아이디(이메일) 정보를 입력해 주세요.");
                 return false;
             }
 
             checkUserId({
-                userId:userId
+                userId: userId
             })
-
 
 
         });
@@ -337,7 +338,7 @@
 
             var userId = $thisForm.find('input[name=userId]').val();
             var password = $thisForm.find('input[name=password]').val();
-            var rePassword = $thisForm.find('input[name=rePassword]').val();
+            var Repassword = $thisForm.find('input[name=Repassword]').val();
             var userName = $thisForm.find('input[name=userName]').val();
             var zipcode = $thisForm.find('input[name=zipcode]').val();
             var addr = $thisForm.find('input[name=addr]').val();

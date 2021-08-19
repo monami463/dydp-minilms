@@ -1,15 +1,18 @@
 package kr.co.dongyang.study.minilms.user.dto;
 
 import kr.co.dongyang.study.minilms.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
 public class UserDto {
